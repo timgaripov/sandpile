@@ -4,7 +4,12 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 <title>Sandpile</title>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="./js/jquery.js"></script>
+<script src="./jqplot/jquery.jqplot.js"></script>
+<script src="./jqplot/plugins/jqplot.logAxisRenderer.js"></script>
+<script src="./jqplot/plugins/jqplot.canvasTextRenderer.js"></script>
+<script src="./jqplot/plugins/jqplot.canvasAxisLabelRenderer.js"></script>
+<link rel="stylesheet" type="text/css" href="./jqplot/jquery.jqplot.css" />
 </head>
 
 <body>
@@ -19,7 +24,7 @@
             Медленнее
         </div>
         <div style='display: inline-block; float:left; width: 75%; margin-left:1%;'>
-            <input id='slider' type="range" min="500" max="999" value="900" step="10" style='width: 100%'> </input> 
+            <input id='slider' type="range" min="499" max="999" value="900" step="10" style='width: 100%'> </input> 
         </div>
         <div style='display: inline-block; float:left; width: 7%; margin-left: 2%; margin-top: 3px'>
             Быстрее
@@ -27,14 +32,23 @@
     </div>
 </div>
 <div style='display: inline-block; float: left; margin-left: 20px'>
-    <div>
-        Для перезапуска модели обновите страницу.
+    <div style='text-align: center'>
+        <b>
+            Модель песчаной кучи Бака-Танга-Визенфельда
+        </b>
     </div>
+    <br/>
     <div style='margin-top: 20px'>
         Количество брошенных песчинок: <span id='grains_dropped'> 0 </span>
     </div>
     <div>
         Количетсво лавин: <span id='avalanche_cnt'> 0 </span>
+    </div>
+    <div id='chartdiv' style="width: 450px; height: 350px; margin-left: 15px; margin-top: 20px">
+    </div>
+
+    <div style='margin-top: 20px'>
+        Для перезапуска модели обновите страницу.
     </div>
 </div>
 </div>
