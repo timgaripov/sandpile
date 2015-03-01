@@ -30,6 +30,45 @@ chart = $.jqplot('chartdiv', [[1, 0]], {
     }]
 });
 
+const MEM = 200;
+
+procs = [[[0, 100]], [[0, 0]], [[0, 0]], [[0, 0]]];
+
+procs_chart = $.jqplot('procsdiv', procs, {
+    title: 'Распределение количества песчинок по клеткам',
+    grid: {
+        background: '#FFFFFF',
+    },
+    axes: {
+        xaxis: {
+            label: 'шаг',
+            min: 0,
+            max: MEM + 50,
+            numberTicks: 11,
+        },
+        yaxis: {
+            labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+            label: '% клеток',
+            //min: 0,
+            //max: 100,
+            numberTicks: 5,
+        }
+    },
+    
+    seriesDefaults: {
+        showMarker: false,
+    },
+    series: [
+        {color: '#CCCCCC', label: '0',}, 
+        {color: '#9999EB', label: '1',}, 
+        {color: '#4D4DDB', label: '2',}, 
+        {color: '#0000B8', label: '3',}
+    ],
+    legend: {
+        show: true,
+    }
+});
+
 
 width = canvas.width;
 height = canvas.height;
@@ -47,6 +86,9 @@ grains_dropped = 0;
 avalanche_cnt = 0;
 avalanche_size = 0;
 distribution = [];
+
+cnts = [100, 0, 0, 0];
+const P = 1.0 / (L * L) * 100.0;
 
 for (i = 0; i < L; i++) {
     cells.push([]);
@@ -82,7 +124,9 @@ function Step() {
         $('#grains_dropped').html(grains_dropped);
         x = Math.floor(Math.random() * L);
         y = Math.floor(Math.random() * L);
+        cnts[cells[x][y]] -= P;
         cells[x][y] += 1;
+        cnts[cells[x][y]] += P;
         Draw(x, y);
         queue = [];
         if (cells[x][y] >= 4) {
@@ -91,6 +135,29 @@ function Step() {
             avalanche_cnt++;
             avalanche_size = 0;
             $('#avalanche_cnt').html(avalanche_cnt);
+        }
+        procs[0].push([grains_dropped, cnts[0]]);
+        procs[1].push([grains_dropped, cnts[1]]);
+        procs[2].push([grains_dropped, cnts[2]]);
+        procs[3].push([grains_dropped, cnts[3]]);
+        if (procs[0].length > MEM) {
+            procs[0].shift();
+            procs[1].shift();
+            procs[2].shift();
+            procs[3].shift();
+        }
+        if (grains_dropped % 25 == 0) {
+            options =  {
+                data: procs,
+                axes: {
+                    xaxis: {
+                        min: Math.max(0, grains_dropped - MEM),
+                        max: Math.max(MEM, grains_dropped) + 50,
+                    },
+                },
+            };
+            //console.log(options);
+            procs_chart.replot(options);
         }
     }
     else {
@@ -119,7 +186,9 @@ function Step() {
                 avalanche_size++;
                 x = queue[q_cur][0];
                 y = queue[q_cur][1];
+                cnts[cells[x][y]] -= P;
                 cells[x][y] -= 4;
+                cnts[cells[x][y]] += P;
                 Draw(x, y);
                 for (k = 0; k < 4; k++) {
                     nx = x + dx[k];
@@ -127,7 +196,9 @@ function Step() {
                     if (nx < 0 || ny < 0 || nx >= L || ny >= L) {
                         continue;
                     }
+                    cnts[cells[nx][ny]] -= P;
                     cells[nx][ny] += 1;
+                    cnts[cells[nx][ny]] += P;
                     Draw(nx, ny);
                 }
             }
@@ -141,6 +212,7 @@ function Step() {
             }
         }
     }
+
 }
 
 $('#slider').change(function() {
