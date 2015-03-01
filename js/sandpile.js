@@ -113,7 +113,6 @@ function Step() {
            
             chart.replot({data: [distribution]}); 
             queue = [];
-            console.log(distribution);
         }
         else {
             for (q_cur = 0; q_cur < queue.length; q_cur++) {
