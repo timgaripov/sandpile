@@ -55,16 +55,23 @@ for (i = 0; i < L; i++) {
     }
 }
 
-function Draw() {
+function Draw(x, y) {
+    ctx.fillStyle = colors[cells[x][y]];
+    ctx.strokeStyle = 'black';
+    ctx.fillRect(w * x, h * y, w, h);
+    ctx.strokeRect(w * x, h * y, w, h);
+
+}
+
+function DrawAll() {
     for (i = 0; i < L; i++) {
         for (j = 0; j < L; j++) {            
-            ctx.fillStyle = colors[cells[i][j]];
-            ctx.strokeStyle = 'black';
-            ctx.fillRect(w * i, h * j, w, h);
-            ctx.strokeRect(w * i, h * j, w, h);
+            Draw(i, j);
         }
     }
 }
+
+DrawAll();
 
 var timer;
 interval = 10;
@@ -76,6 +83,7 @@ function Step() {
         x = Math.floor(Math.random() * L);
         y = Math.floor(Math.random() * L);
         cells[x][y] += 1;
+        Draw(x, y);
         queue = [];
         if (cells[x][y] >= 4) {
             queue.push([x, y]);
@@ -113,6 +121,7 @@ function Step() {
                 x = queue[q_cur][0];
                 y = queue[q_cur][1];
                 cells[x][y] -= 4;
+                Draw(x, y);
                 for (k = 0; k < 4; k++) {
                     nx = x + dx[k];
                     ny = y + dy[k];
@@ -120,6 +129,7 @@ function Step() {
                         continue;
                     }
                     cells[nx][ny] += 1;
+                    Draw(nx, ny);
                 }
             }
             queue = [];
@@ -132,7 +142,6 @@ function Step() {
             }
         }
     }
-    Draw();
 }
 
 $('#slider').change(function() {
