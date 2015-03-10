@@ -66,7 +66,52 @@ procs_chart = $.jqplot('procsdiv', procs, {
     ],
     legend: {
         show: true,
-    }
+    },
+    canvasOverlay: {
+        show: true,
+        objects: [
+             {dashedHorizontalLine: {
+                name: 'p_3',
+                y: 44.61,
+                lineWidth: 1,
+                color: '#0000D6',
+                xmaxOffset: '50px',
+                shadow: false,
+                dashPattern: [5, 5],
+            }},
+            {dashedHorizontalLine: {
+                name: 'p_2',
+                y: 30.63,
+                lineWidth: 1,
+                color: '#4B4BA9',
+                xmaxOffset: '50px',
+                shadow: false,
+                dashPattern: [5, 5],
+            }},
+            {dashedHorizontalLine: {
+                name: 'p_1',
+                y: 17.39,
+                lineWidth: 1,
+                color: '#7777C9',
+                xmaxOffset: '50px',
+                shadow: false,
+                dashPattern: [5, 5],
+            }},
+            {dashedHorizontalLine: {
+                name: 'p_0',
+                y: 7.36,
+                lineWidth: 1,
+                color: '#777777',
+                xmaxOffset: '50px',
+                shadow: false,
+                dashPattern: [5, 5],
+            }},
+
+
+
+
+        ],
+    },
 });
 
 
